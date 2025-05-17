@@ -50,5 +50,5 @@ func _on_npc_input_event(viewport, event, shape_idx):
 		PlayerBehavior.register_interaction(npc_name)
 		VillageContext.set_current_npc(npc_name)
 		var main = get_tree().root.get_node("Main")
-		var dialogue_box = get_tree().root.get_node("Main/CanvasLayer/DialogueBox")
+		var dialogue_box = get_tree().root.get_node("Main/CanvasLayer/Control/DialogueBox")
 		dialogue_box.show_dialogue("%s: Hello, I am %s !" % [npc_name, npc_name])
