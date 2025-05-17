@@ -3,50 +3,37 @@ extends Node2D
 @onready var item_scene = preload("res://items/Item.tscn")
 
 var ITEM_SPAWN_CONFIGS = [
-	{
-		"name": "Apple",
-		"color": Color.RED,
-		"needed_in_inventory": 2,
-		"max_on_map": 3,
-		"despawn_time": 4,
-		"spawn_condition": func() -> bool: return true
-	},
-	{
-		"name": "Flower",
-		"color": Color.HOT_PINK,
-		"needed_in_inventory": 1,
-		"max_on_map": 2,
-		"despawn_time": 5,
-		"spawn_condition": func() -> bool: return true
-	},
-	{
-		"name": "Wood",
-		"color": Color.SADDLE_BROWN,
-		"needed_in_inventory": 1,
-		"max_on_map": 2,
-		"despawn_time": 10,
-		"spawn_condition": func() -> bool: return QuestManager.quest_active and QuestManager.quest_type == "storm"
-	}
+	ItemSpawnConfig.new(
+		"Apple", "apple.png", 2, 3, 4,
+		func(): return true
+	),
+	ItemSpawnConfig.new(
+		"Flower", "flower.png", 1, 2, 5,
+		func(): return true
+	),
+	ItemSpawnConfig.new(
+		"Wood", "wood.png", 1, 2, 10,
+		func(): return QuestManager.quest_active and QuestManager.quest_type == "storm"
+	)
 ]
 
 func _ready():
-	print("npc_scene =", npc_scene)
 	spawn_npc("Lira", "res://graphics/girl_stand.png", Vector2(100, 100))
 	spawn_npc("Tomo", "res://graphics/blacksmith_stand.png", Vector2(300, 100))
 	spawn_npc("Anna", "res://graphics/granny_stand.png", Vector2(200, 250))
 	
 func check_and_spawn_needed_items():
 	for item_conf in ITEM_SPAWN_CONFIGS:
-		if not item_conf["spawn_condition"].call():
+		if not item_conf.spawn_condition.call():
 			continue
-		var name = item_conf["name"]
-		var color = item_conf["color"]
-		var needed_in_inventory = item_conf["needed_in_inventory"]
-		var max_on_map = item_conf["max_on_map"]
+		var name = item_conf.name
+		var path = item_conf.path
+		var needed_in_inventory = item_conf.needed_in_inventory
+		var max_on_map = item_conf.max_on_map
 		var in_inventory = Inventory.get_item_count(name)
 		var on_map = count_items_on_map(name)
 		if in_inventory < needed_in_inventory and on_map < max_on_map:
-			spawn_item(name, color, get_random_valid_position())
+			spawn_item(name, path, get_random_valid_position())
 
 func get_random_position():
 	return Vector2(randi() % 600 + 50, randi() % 400 + 50)
@@ -54,19 +41,23 @@ func get_random_position():
 	
 func spawn_npc(name: String, path: String, pos: Vector2):
 	var npc_instance = npc_scene.instantiate()
-	print("npc_instance =", npc_instance)
-
-	print(npc_instance, npc_instance.get_script())
 	npc_instance.npc_name = name
 	npc_instance.position = pos
 	npc_instance.set_sprite_texture(path)
 	add_child(npc_instance)
 
 	
-func spawn_item(name: String, color: Color, pos: Variant = null):
+func spawn_item(name: String, path: String, pos: Variant = null):
 	var item = item_scene.instantiate()
 	item.item_name = name
-	item.item_color = color
+	# Load the texture from the given path
+	var tex = load(path)
+	
+	# Assign texture to Sprite2D
+	var sprite = item.get_node("ItemImg")
+	sprite.texture = tex
+	
+	# Set position as before
 	if typeof(pos) == TYPE_VECTOR2:
 		item.position = pos
 	else:
