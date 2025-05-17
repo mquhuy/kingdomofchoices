@@ -11,8 +11,7 @@ func hide_dialogue():
 func _on_give_gift_pressed() -> void:
 	var current_npc = VillageContext.get_currnet_npc()
 	if current_npc != "":
-		var item_to_give = "Apple"
-		PlayerBehavior.give_gift(current_npc, item_to_give)
+		PlayerBehavior.give_gift(current_npc)
 	else:
 		show_dialogue("No one to give a gift to")
 

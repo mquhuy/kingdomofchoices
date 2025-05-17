@@ -13,7 +13,7 @@ var ITEM_SPAWN_CONFIGS = [
 	),
 	ItemSpawnConfig.new(
 		"Wood", "wood.png", 1, 2, 10,
-		func(): return QuestManager.quest_active and QuestManager.quest_type == "storm"
+		func(): return true
 	)
 ]
 
@@ -37,7 +37,6 @@ func check_and_spawn_needed_items():
 
 func get_random_position():
 	return Vector2(randi() % 600 + 50, randi() % 400 + 50)
-	
 	
 func spawn_npc(name: String, path: String, pos: Vector2):
 	var npc_instance = npc_scene.instantiate()

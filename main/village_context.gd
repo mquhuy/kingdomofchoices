@@ -2,6 +2,7 @@ extends Node
 
 var context: String = "Normal Day"
 var current_npc: String = ""
+var npc_wanted_gifts: Dictionary = {}
 
 func set_context(new_context: String):
 	context = new_context
@@ -14,3 +15,12 @@ func get_currnet_npc() -> String:
 	
 func unset_current_npc():
 	current_npc = ""
+	
+func reset_npc_wanted_gifts():
+	npc_wanted_gifts = {}
+	
+func get_npc_wanted_gift(npc_name):
+	var random_gift = WorldConfig.get_random_item()
+	var wanted_gift = npc_wanted_gifts.get(npc_name, random_gift)
+	npc_wanted_gifts[npc_name] = wanted_gift
+	return wanted_gift

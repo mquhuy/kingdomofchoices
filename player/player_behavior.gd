@@ -29,8 +29,9 @@ func get_favorite_npc():
 			favorite = name
 	return favorite if max_interactions > 0 else ""
 	
-func give_gift(npc_name: String, item_name: String):
+func give_gift(npc_name: String):
 	var dialogue_box = get_tree().root.get_node("Main/CanvasLayer/Control/DialogueBox")
+	var item_name = VillageContext.get_npc_wanted_gift(npc_name)
 	if Inventory.has_item(item_name, 1):
 		Inventory.remove_item(item_name, 1)
 		increase_relationship(npc_name, 2)
@@ -67,7 +68,7 @@ func parse_bool(value):
 	return false
 
 func _on_ai_help_response(ai_response):
-	var dialogue_box = get_tree().root.get_node("Main/CanvasLayer/DialogueBox")
+	var dialogue_box = get_tree().root.get_node("Main/CanvasLayer/Control/DialogueBox")
 	ai_answer = ai_response.get("text")
 	ai_answer_positive = parse_bool(ai_response.get("agree", "false"))
 	print(ai_answer, ai_answer_positive)
