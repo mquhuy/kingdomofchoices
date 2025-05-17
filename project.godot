@@ -25,6 +25,11 @@ WorldConfig="*res://main/world_config.gd"
 Npc="*res://characters/npc.gd"
 AI="*res://utils/ai.gd"
 
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
