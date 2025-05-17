@@ -7,7 +7,8 @@ func _process(delta):
 	else:
 		quest_status_label.text = ""
 
-func _on_start_quest_button_pressed() -> void:
+func _on_start_quest_button_pressed():
+	print("Starting quest")
 	var character_name = WorldConfig.get_random_character()
 	var quest_name = WorldConfig.get_random_quest()
 	var quest_goal = WorldConfig.get_random_number(5, 15)

@@ -12,9 +12,7 @@ func _ready():
 		print("Label not found")
 	else:
 		label.text = npc_name
-
 	var figure = $Figure
-	
 	print("Ready: ", npc_name)
 	
 func set_sprite_texture(path: String):

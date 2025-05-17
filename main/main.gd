@@ -101,3 +101,7 @@ func is_position_valid(pos: Vector2, min_distance: float) -> bool:
 
 func _on_item_need_check_timer_timeout() -> void:
 	check_and_spawn_needed_items()
+
+
+func _on_start_quest_button_pressed() -> void:
+	pass # Replace with function body.
