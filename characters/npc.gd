@@ -1,7 +1,8 @@
 extends Area2D
-
 @export var npc_name: String = "Villager"
 @export var color: Color = Color(1,1,1)
+var ai_answer = ""
+var ai_answer_positive = false
 
 func _ready():
 	add_to_group("NPCs")
@@ -10,8 +11,33 @@ func _ready():
 		print("Label not found")
 	else:
 		label.text = npc_name
-	$ColorRect.color = color
+
+	var figure = $Figure
+	
 	print("Ready: ", npc_name)
+	
+func set_sprite_texture(path: String):
+	# Extract the file name (e.g., "tomo_sprite.png")
+	var file_name = path.get_file()
+	# Remove the extension to get the node name (e.g., "tomo_sprite")
+	var node_name = file_name.get_basename()
+	# Try to get the Sprite2D node with that name
+	var sprite = $Figure
+	if sprite:
+		sprite.texture = load(path)
+	else:
+		push_error("Sprite2D node named '%s' not found in NPC scene!" % node_name)
+	
+func _on_ai_response(ai_response):
+	var dialogue_box = get_tree().root.get_node("Main/CanvasLayer/DialogueBox")
+	ai_answer = ai_response.get("text")
+	ai_answer_positive = ai_response.get("positive", false)
+	dialogue_box.show_dialogue(
+		"%s: %s" % [npc_name, ai_answer]
+	)
+	if ai_answer_positive:
+		PlayerBehavior.increase_relationship(npc_name, 1)
+		QuestManager.quest_npc_agreed = true
 
 func _on_npc_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton and event.pressed:
@@ -21,17 +47,14 @@ func _on_npc_input_event(viewport, event, shape_idx):
 		
 		# Check if this NPC is key for the quest
 		if QuestManager.quest_active and QuestManager.quest_npc == npc_name:
-			var relationship_score = PlayerBehavior.get_relationship(npc_name)
-			var required
-			print("Relationship score with %s is %d" % [npc_name, relationship_score])
-			if relationship_score >= 3:
+			if QuestManager.quest_npc_agreed:
 				QuestManager.progress_quest()
-				PlayerBehavior.increase_relationship(npc_name, 1)
-				dialogue_box.show_dialogue(
-					"%s: I'll help you! (Progress: %d/%d)" % [npc_name, QuestManager.quest_progress, QuestManager.quest_required]
-				)
 			else:
-				dialogue_box.show_dialogue(npc_name + ": Sorry, I don't trust you enough to help with the storm.", self)
+				var relationship_score = PlayerBehavior.get_relationship(npc_name)
+				ai_answer = ""
+				AI.get_ai_dialogue("As the NPC %s, answer to player request for help with preparing for %s. 
+				The relationship score between your character and the player is %d/20" %[npc_name, QuestManager.quest_type, relationship_score], Callable(self, "_on_ai_response"))
+				dialogue_box.show_dialogue(npc_name + " is thinking about your request.", self)
 		else:
 			dialogue_box.show_dialogue("%s: Hello, I am %s !" % [npc_name, npc_name], self)
 		

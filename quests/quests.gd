@@ -9,7 +9,7 @@ func _process(delta):
 
 func _on_start_quest_button_pressed() -> void:
 	var quest_names = ["festival time", "storm recovery", "spring cleaning", "midnight hunt"]
-	var character_names = ["Anna", "Tomo", "Lira", "Ben"]
+	var character_names = ["Anna", "Tomo", "Lira"]
 	var rng = RandomNumberGenerator.new()
 	rng.randomize()
 

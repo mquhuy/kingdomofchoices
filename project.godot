@@ -22,6 +22,8 @@ PlayerBehavior="*res://player/player_behavior.gd"
 VillageContext="*res://main/village_context.gd"
 Inventory="*res://items/inventory.gd"
 WorldConfig="*res://main/world_config.gd"
+Npc="*res://characters/npc.gd"
+AI="*res://utils/ai.gd"
 
 [rendering]
 
