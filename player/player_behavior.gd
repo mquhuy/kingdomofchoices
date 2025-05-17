@@ -48,7 +48,8 @@ func ask_for_help(npc_name: String):
 			QuestManager.progress_quest()
 		else:
 			var relationship_score = PlayerBehavior.get_relationship(npc_name)
-			AI.get_ai_dialogue({'npc_name': npc_name, 'interaction_type': 'ask for help', 'quest_type': QuestManager.quest_type, 'relationship_score': relationship_score}, Callable(self, "_on_ai_help_response"))
+			var npc_count = QuestManager.quest_npc_counts.get(npc_name, 0)
+			AI.get_ai_dialogue({'npc_name': npc_name, 'interaction_type': 'ask for help', 'quest_type': QuestManager.quest_type, 'relationship_score': relationship_score, 'ask_count': npc_count}, Callable(self, "_on_ai_help_response"))
 			dialogue_box.show_dialogue(npc_name + " is thinking about your request.")
 		# Check for quest completion
 		if QuestManager.is_quest_complete():
@@ -58,14 +59,20 @@ func ask_for_help(npc_name: String):
 	else:
 		dialogue_box.show_dialogue("%s: It seems you don't have anything that needs my help." % [npc_name])
 
+func parse_bool(value):
+	if typeof(value) == TYPE_BOOL:
+		return value
+	if typeof(value) == TYPE_STRING:
+		return value.to_lower() == "true"
+	return false
+
 func _on_ai_help_response(ai_response):
 	var dialogue_box = get_tree().root.get_node("Main/CanvasLayer/DialogueBox")
 	ai_answer = ai_response.get("text")
-	ai_answer_positive = ai_response.get("agree", "false") == "true"
+	ai_answer_positive = parse_bool(ai_response.get("agree", "false"))
 	print(ai_answer, ai_answer_positive)
 	dialogue_box.show_dialogue(
 		"%s: %s" % [VillageContext.get_currnet_npc(), ai_answer]
 	)
 	if ai_answer_positive:
-		PlayerBehavior.increase_relationship(npc_name, -1)
 		QuestManager.progress_quest()

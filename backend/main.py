@@ -20,6 +20,7 @@ class AIRequest(BaseModel):
     npc_name: str
     interaction_type: str
     relationship_score: int
+    ask_count: int = 0
     quest_type: str = None
     model: str = None  # "gpt-4", "deepseek-chat", "phi4-mini", etc.
 
@@ -57,7 +58,11 @@ or
             print("Missing quest type")
             return JSONResponse(content={"text": "Invalid request format. Please provide all required fields."}, status_code=400)
         prompt = f"""You are {req.npc_name}, your personal relationship with the player is {req.relationship_score}, with the default value is 3 and the maximum value is 20.
-The player asked you to help with a {req.quest_type}."""
+The lower the value, the more rude you are, and less likely you are to help.
+The higher the value, the more friendly you are, and more likely you are to help.
+You have helped the player with this quest {req.ask_count} times.
+The higher the number, the less likely you are to help.
+The player asked you to help with a quest: {req.quest_type}."""
 
     try:
         model = req.model or OPENAI_DEFAULT_MODEL
@@ -92,6 +97,7 @@ The player asked you to help with a {req.quest_type}."""
                 "max_tokens": 100,
                 "temperature": 0.9,
             }
+            print(data)
             resp = requests.post(deepseek_url, json=data, headers=headers, timeout=60)
             resp.raise_for_status()
             result = resp.json()
