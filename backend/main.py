@@ -24,7 +24,7 @@ CHARACTERS = {
 
 base_prompt = """You are an NPC in a cozy village game. Respond in a friendly, in-character way.
 Keep the answer short and concise. Under 200 characters.
-Use a friendly tone and avoid being too formal. 
+Avoid being too formal. 
 Decide your response based on the character you are playing, the difficulty of the request or question,
 the context of the game, and the personal relationship between the character and the user.
 Generate the response as the exact character that is given in the context."""
@@ -66,7 +66,33 @@ or
 {
     "rate": -2,
     "text": "I hate it! Why would you give me this?"
+}
 """
+
+chat_prompt = base_prompt + """
+Respond using a json format with a "text" key, and a "rate" key with a integer value, your interest in the chat topic.
+The value should be between -2 and 2, with -2 being "I hate it" and 2 being "I love it".
+For example:
+{
+    "rate": 0,
+    "text": "OK Thanks. Nice chat."
+}
+or
+{
+    "rate": 2,
+    "text": "Thank you! I love it! It's so nice of you!"  
+}
+or
+{
+    "rate": -2,
+    "text": "I hate it! Why would you talk to me like that?"
+}
+"""
+
+human_prompt = """
+You are a human player in a cozy village game. Respond in a friendly, in-character way.
+Keep the answer short and concise. Under 200 characters.
+Use a friendly tone and avoid being too formal."""
 
 class AIRequest(BaseModel):
     npc_name: str
@@ -78,6 +104,7 @@ class AIRequest(BaseModel):
 
 @app.post("/api/ai_dialogue")
 async def ai_dialogue(req: AIRequest):
+    print(req)
     if req.npc_name not in CHARACTERS:
         print("Invalid NPC name")
         return JSONResponse(content={"text": "Invalid NPC name. Please provide a valid NPC name."}, status_code=400)
@@ -108,6 +135,31 @@ You have helped the player with this quest {req.ask_count} times.
 The higher the number, the less likely you are to help.
 The player asked you to help with a quest: {req.quest_type}."""
         system_prompt = gift_prompt
+    elif req.interaction_type == "think of chat":
+        system_prompt = human_prompt
+        prompt = f"""You want to get closer to NPC {req.npc_name}, {npc_description}.
+Your personal relationship with the NPC is {req.relationship_score}, with the default value is 3 and the maximum value is 20.
+The lower the value, the less likely the NPC will be friendly to you.
+You need to think of 3 chat topics to get closer to the NPC.
+Come up with 3 chat topics that are related to the NPC, and are likely to be interesting to the NPC.
+Each topic should be short and concise, under 200 characters.
+The topics should be related to the NPC's interests, hobbies, and personality.
+Answer in a json format with 3 "option" key with a list of 3 topics.
+For example:
+{{
+    "option 1": "What do you think about the weather?",
+    "option 2": "What do you think about the village?",
+    "option 3": "What do you think about the blacksmith?"
+}}
+"""
+    elif req.interaction_type == "chat":
+        system_prompt = chat_prompt
+        prompt = f"""You are {req.npc_name}. {npc_description}
+Your personal relationship with the player is {req.relationship_score}, with the default value is 3 and the maximum value is 20.
+The lower the value, the more rude you are, and less likely you like them.
+The higher the value, the more friendly you are, and more likely you like them.
+The player wanted a small talk with you.
+The player said: {req.quest_type}."""
     else:
         return JSONResponse(content={"text": "Invalid request format. Please provide all required fields."}, status_code=400)
 

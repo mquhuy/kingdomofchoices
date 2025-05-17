@@ -81,6 +81,63 @@ func ask_for_help(npc_name: String):
 	else:
 		dialogue_box.show_dialogue("%s: It seems you don't have anything that needs my help." % [npc_name])
 
+func think_of_chat(npc_name: String):
+	var dialogue_box = get_tree().root.get_node("Main/CanvasLayer/Control/DialogueBox")
+	if npc_name == "":
+		dialogue_box.show_dialogue("Please select one character to chat")
+		return
+	disable_buttons()
+	var relationship_score = PlayerBehavior.get_relationship(npc_name)
+	AI.get_ai_dialogue({'npc_name': npc_name, 'interaction_type': 'think of chat', 'quest_type': QuestManager.quest_type, 'relationship_score': relationship_score, 'ask_count': 0}, Callable(self, "_on_ai_think_response"))
+	
+func _on_ai_think_response(ai_response):
+	var option1Button = get_tree().root.get_node("Main/CanvasLayer/Control/DialogueBox/ChatOptionsContainer/Option1Button")
+	var option2Button = get_tree().root.get_node("Main/CanvasLayer/Control/DialogueBox/ChatOptionsContainer/Option2Button")
+	var option3Button = get_tree().root.get_node("Main/CanvasLayer/Control/DialogueBox/ChatOptionsContainer/Option3Button")
+	var option1 = ai_response.get("option 1")
+	var option2 = ai_response.get("option 2")
+	var option3 = ai_response.get("option 3")
+	if option1 != null:
+		option1Button.text = option1
+		option1Button.visible = true
+	if option2 != null:
+		option2Button.text = option2
+		option2Button.visible = true
+	if option3 != null:
+		option3Button.text = option3
+		option3Button.visible = true
+		
+func _on_ai_chat_response(ai_response):
+	var dialogue_box = get_tree().root.get_node("Main/CanvasLayer/Control/DialogueBox")
+	ai_answer = ai_response.get("text")
+	ai_rate = parse_int(ai_response.get("rate", 0))
+	print(ai_answer, ai_rate)
+	dialogue_box.show_dialogue(
+		"%s: %s" % [VillageContext.get_currnet_npc(), ai_answer]
+	)
+	increase_relationship(npc_name, ai_rate)
+	enable_buttons()
+		
+func chat_with_npc(question):
+	var npc_name = VillageContext.get_currnet_npc()
+	var relationship_score = PlayerBehavior.get_relationship(npc_name)
+	AI.get_ai_dialogue({'npc_name': npc_name, 'interaction_type': 'chat', 'quest_type': question, 'relationship_score': relationship_score, 'ask_count': 0}, Callable(self, "_on_ai_chat_response"))
+		
+func select_chat_option(option_number):
+	var option1Button = get_tree().root.get_node("Main/CanvasLayer/Control/DialogueBox/ChatOptionsContainer/Option1Button")
+	var option2Button = get_tree().root.get_node("Main/CanvasLayer/Control/DialogueBox/ChatOptionsContainer/Option2Button")
+	var option3Button = get_tree().root.get_node("Main/CanvasLayer/Control/DialogueBox/ChatOptionsContainer/Option3Button")
+	option1Button.visible = false
+	option2Button.visible = false
+	option3Button.visible = false
+	match option_number:
+		1:
+			chat_with_npc(option1Button.text)
+		2:
+			chat_with_npc(option2Button.text)
+		3:
+			chat_with_npc(option3Button.text)
+
 func parse_bool(value):
 	if typeof(value) == TYPE_BOOL:
 		return value

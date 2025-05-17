@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://c161lorq7k1el"]
+[gd_scene load_steps=6 format=3 uid="uid://c161lorq7k1el"]
 
 [ext_resource type="Script" uid="uid://ciex1j7wss2yl" path="res://dialogue_box/dialogue_box.gd" id="1_2ix3t"]
 
@@ -7,6 +7,8 @@
 [sub_resource type="CanvasTexture" id="CanvasTexture_no5ax"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_6edet"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_50r5p"]
 
 [node name="DialogueBox" type="Panel"]
 script = ExtResource("1_2ix3t")
@@ -44,6 +46,40 @@ text = "Tips
 "
 icon = SubResource("CanvasTexture_6edet")
 
+[node name="ChatButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 246.0
+offset_top = 42.0
+offset_right = 339.0
+offset_bottom = 75.0
+text = "Chat"
+icon = SubResource("CanvasTexture_50r5p")
+
+[node name="ChatOptionsContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 350.0
+offset_right = 705.0
+offset_bottom = 72.0
+
+[node name="Option1Button" type="Button" parent="ChatOptionsContainer"]
+visible = false
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Option2Button" type="Button" parent="ChatOptionsContainer"]
+visible = false
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Option3Button" type="Button" parent="ChatOptionsContainer"]
+visible = false
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
 [connection signal="pressed" from="GiftButton" to="." method="_on_give_gift_pressed"]
 [connection signal="pressed" from="AskHelpButton" to="." method="_on_ask_help_button_pressed"]
 [connection signal="pressed" from="TipButton" to="." method="_on_tip_button_pressed"]
+[connection signal="pressed" from="ChatButton" to="." method="_on_chat_button_pressed"]
+[connection signal="pressed" from="ChatOptionsContainer/Option1Button" to="." method="_on_option_1_button_pressed"]
+[connection signal="pressed" from="ChatOptionsContainer/Option2Button" to="." method="_on_option_2_button_pressed"]
+[connection signal="pressed" from="ChatOptionsContainer/Option3Button" to="." method="_on_option_3_button_pressed"]
