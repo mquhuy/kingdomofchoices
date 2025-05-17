@@ -1,8 +1,21 @@
-[gd_scene format=3 uid="uid://c161lorq7k1el"]
+[gd_scene load_steps=2 format=3 uid="uid://c161lorq7k1el"]
+
+[ext_resource type="Script" uid="uid://ciex1j7wss2yl" path="res://scripts/dialogue_box.gd" id="1_2ix3t"]
 
 [node name="DialogueBox" type="Panel"]
+script = ExtResource("1_2ix3t")
 
 [node name="DialogueText" type="Label" parent="."]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
+offset_right = 110.0
+offset_bottom = 57.0
+
+[node name="Give Gift" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 43.0
+offset_right = 52.0
+offset_bottom = 56.0
+text = "Give gift"
+
+[connection signal="pressed" from="Give Gift" to="." method="_on_give_gift_pressed"]

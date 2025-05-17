@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 QuestManager="*res://scripts/quest_manager.gd"
 PlayerBehavior="*res://scripts/player_behavior.gd"
 VillageContext="*res://scripts/village_context.gd"
+Inventory="*res://scripts/inventory.gd"
 
 [rendering]
 
