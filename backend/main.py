@@ -43,7 +43,7 @@ or
 
 {
     "agree": "false",
-    "text": "Of course! I can help you with that. What do you need?"
+    "text": "No. I'm busy. Go away."
 }
 
 Generate the response as the exact character that is given in the context.
