@@ -5,13 +5,18 @@ var quest_type := ""
 var quest_progress := 0
 var quest_required := 3
 var quest_npc := "" # Which NPC is key to this quest
+var quest_instruction := ""
 
 func start_quest(_type: String, _npc: String, _required: int = 3):
 	quest_active = true
-	quest_type = _type
+	quest_type = _type.capitalize()
 	quest_npc = _npc
 	quest_progress = 0
 	quest_required = _required
+	quest_instruction = "%s. Ask %s for help" % [quest_type, quest_npc]
+	VillageContext.set_context(quest_type)
+	var dialogue_box = get_tree().root.get_node("Main/CanvasLayer/DialogueBox")
+	dialogue_box.show_dialogue(QuestManager.quest_instruction)
 
 func progress_quest():
 	if quest_active:

@@ -17,10 +17,11 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-QuestManager="*res://scripts/quest_manager.gd"
-PlayerBehavior="*res://scripts/player_behavior.gd"
-VillageContext="*res://scripts/village_context.gd"
-Inventory="*res://scripts/inventory.gd"
+QuestManager="*res://quests/quest_manager.gd"
+PlayerBehavior="*res://player/player_behavior.gd"
+VillageContext="*res://main/village_context.gd"
+Inventory="*res://items/inventory.gd"
+WorldConfig="*res://main/world_config.gd"
 
 [rendering]
 

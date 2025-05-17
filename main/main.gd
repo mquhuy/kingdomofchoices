@@ -67,27 +67,14 @@ func spawn_item(name: String, color: Color, pos: Variant = null):
 	else:
 		item.position = get_random_valid_position()
 	add_child(item)
-	
-func _process(delta):
-	if QuestManager.quest_active:
-		$QuestStatusLabel.text = "Storm Prep: %d/%d" % [QuestManager.quest_progress, QuestManager.quest_required]
-	else:
-		$QuestStatusLabel.text = ""
-
-
-func _on_start_quest_button_pressed() -> void:
-	QuestManager.start_quest("storm", "Tomo", 3)
-	VillageContext.set_context("Storm Coming!")
-	$StartQuestButton.disabled = true
-	$QuestStatusLabel.text = "Storm quest started! Ask Tomo for help."
 
 func count_items_on_map(item_name: String) -> int:
 	var group_name = "Item_" + item_name
 	return get_tree().get_nodes_in_group(group_name).size()
 
 func get_random_valid_position(min_distance: float = 64.0, max_tries: int = 30) -> Vector2:
-	var area_min = Vector2(50, 50)
-	var area_max = Vector2(750, 450)  # Adjust to fit your scene
+	var area_min = WorldConfig.WORLD_MIN
+	var area_max = WorldConfig.WORLD_MAX
 	var rng = RandomNumberGenerator.new()
 	var pos = get_random_position()
 	for i in max_tries:
