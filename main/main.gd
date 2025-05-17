@@ -1,5 +1,4 @@
 extends Node2D
-
 @onready var npc_scene = preload("res://characters/NPC.tscn")
 @onready var item_scene = preload("res://items/Item.tscn")
 
@@ -31,9 +30,10 @@ var ITEM_SPAWN_CONFIGS = [
 ]
 
 func _ready():
-	spawn_npc("Lira", Color.ORANGE, Vector2(100, 100))
-	spawn_npc("Tomo", Color.GREEN, Vector2(300, 100))
-	spawn_npc("Anna", Color.BLUE, Vector2(200, 250))
+	print("npc_scene =", npc_scene)
+	spawn_npc("Lira", "res://graphics/girl_stand.png", Vector2(100, 100))
+	spawn_npc("Tomo", "res://graphics/blacksmith_stand.png", Vector2(300, 100))
+	spawn_npc("Anna", "res://graphics/granny_stand.png", Vector2(200, 250))
 	
 func check_and_spawn_needed_items():
 	for item_conf in ITEM_SPAWN_CONFIGS:
@@ -51,12 +51,17 @@ func check_and_spawn_needed_items():
 func get_random_position():
 	return Vector2(randi() % 600 + 50, randi() % 400 + 50)
 	
-func spawn_npc(name: String, color: Color, pos: Vector2):
+	
+func spawn_npc(name: String, path: String, pos: Vector2):
 	var npc_instance = npc_scene.instantiate()
+	print("npc_instance =", npc_instance)
+
+	print(npc_instance, npc_instance.get_script())
 	npc_instance.npc_name = name
-	npc_instance.color = color
 	npc_instance.position = pos
+	npc_instance.set_sprite_texture(path)
 	add_child(npc_instance)
+
 	
 func spawn_item(name: String, color: Color, pos: Variant = null):
 	var item = item_scene.instantiate()

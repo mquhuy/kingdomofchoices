@@ -1,5 +1,4 @@
 extends Area2D
-
 @export var npc_name: String = "Villager"
 @export var color: Color = Color(1,1,1)
 
@@ -10,8 +9,24 @@ func _ready():
 		print("Label not found")
 	else:
 		label.text = npc_name
-	$ColorRect.color = color
+	var figure = $Figure
+	
 	print("Ready: ", npc_name)
+	
+
+	
+func set_sprite_texture(path: String):
+	# Extract the file name (e.g., "tomo_sprite.png")
+	var file_name = path.get_file()
+	# Remove the extension to get the node name (e.g., "tomo_sprite")
+	var node_name = file_name.get_basename()
+	# Try to get the Sprite2D node with that name
+	var sprite = $Figure
+	if sprite:
+		sprite.texture = load(path)
+	else:
+		push_error("Sprite2D node named '%s' not found in NPC scene!" % node_name)
+	
 
 func _on_npc_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton and event.pressed:
