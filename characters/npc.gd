@@ -2,6 +2,11 @@
 extends Area2D
 @export var npc_name: String = "Villager"
 @export var color: Color = Color(1,1,1)
+@export var movement_speed: float = 30.0  # Speed of movement along path
+@export var follow_path: bool = false  # Enable path following
+var ai_answer = ""
+var ai_answer_positive = false
+var path_follow = null
 
 func _ready():
 	add_to_group("NPCs")
@@ -12,7 +17,24 @@ func _ready():
 		label.text = npc_name
 	var figure = $Figure
 	print("Ready: ", npc_name)
-	
+
+func _process(delta):
+	if follow_path and path_follow != null:
+		path_follow.progress += movement_speed * delta
+		position = path_follow.global_position
+
+func assign_to_path(path_node: Path2D):
+	if not path_node:
+		print("Path node is null")
+		return
+	path_follow = PathFollow2D.new()
+	path_follow.loop = true
+	path_node.add_child(path_follow)
+	follow_path = true
+
+	print("NPC ", npc_name, " assigned to path")
+
+
 func set_sprite_texture(path: String):
 	# Extract the file name (e.g., "tomo_sprite.png")
 	var file_name = path.get_file()

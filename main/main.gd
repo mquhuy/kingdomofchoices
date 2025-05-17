@@ -17,11 +17,31 @@ var ITEM_SPAWN_CONFIGS = [
 	)
 ]
 
+
 func _ready():
-	spawn_npc("Lira", "res://graphics/girl_stand.png", Vector2(450, 100))
-	spawn_npc("Tomo", "res://graphics/blacksmith_stand.png", Vector2(1300, 550))
-	spawn_npc("Anna", "res://graphics/granny_stand.png", Vector2(550, 500))
-	
+	# First, create the level instance
+	var npc_root = npc_scene.instantiate()
+	print("NPC root instance created: ", npc_root)
+	add_child(npc_root)
+	move_child(npc_root, 0)  # Move to back
+
+	# Find the paths in the NPC scene
+	var path1 = npc_root.get_node("NPCPaths/NPCPath1") as Path2D
+	var path2 = npc_root.get_node("NPCPaths/NPCPath2") as Path2D
+	var path3 = npc_root.get_node("NPCPaths/NPCPath3") as Path2D
+
+	print("Paths found: ", path1, path2, path3)
+
+	# Spawn NPCs and assign them to paths
+	var lira = spawn_npc("Lira", "res://graphics/girl_stand.png", Vector2(450, 100))
+	var tomo = spawn_npc("Tomo", "res://graphics/blacksmith_stand.png", Vector2(1300, 550))
+	var anna = spawn_npc("Anna", "res://graphics/granny_stand.png", Vector2(550, 500))
+
+	# Assign NPCs to paths
+	if path1: lira.assign_to_path(path1)
+	if path2: tomo.assign_to_path(path2)
+	if path3: anna.assign_to_path(path3)
+
 func check_and_spawn_needed_items():
 	for item_conf in ITEM_SPAWN_CONFIGS:
 		if not item_conf.spawn_condition.call():
@@ -44,6 +64,7 @@ func spawn_npc(name: String, path: String, pos: Vector2):
 	npc_instance.position = pos
 	npc_instance.set_sprite_texture(path)
 	add_child(npc_instance)
+	return npc_instance
 
 	
 func spawn_item(name: String, path: String, pos: Variant = null):

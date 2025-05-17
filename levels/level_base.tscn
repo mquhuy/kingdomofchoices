@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=4 uid="uid://bcd12ih7lqok3"]
+[gd_scene load_steps=12 format=4 uid="uid://bcd12ih7lqok3"]
 
 [ext_resource type="Texture2D" uid="uid://cfk5diap1fuxx" path="res://graphics/background.png" id="1_da5si"]
 [ext_resource type="Texture2D" uid="uid://c6atsses4um0c" path="res://backgroundTileAssets/mystic_woods_free_2.2/sprites/tilesets/plains.png" id="1_hk6b7"]
@@ -398,6 +398,24 @@ texture = ExtResource("2_nmr65")
 [sub_resource type="TileSet" id="TileSet_da5si"]
 sources/0 = SubResource("TileSetAtlasSource_vmt1o")
 
+[sub_resource type="Curve2D" id="Curve2D_da5si"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 443, 86, 0, 0, 0, 0, 565, 317, 0, 0, 0, 0, 814, 327, 0, 0, 0, 0, 810, 566, 0, 0, 0, 0, 810, 786, 0, 0, 0, 0, 798, 1004, 0, 0, 0, 0, 769, 1094, 0, 0, 0, 0, 388, 1075, 0, 0, 0, 0, 204, 1085)
+}
+point_count = 9
+
+[sub_resource type="Curve2D" id="Curve2D_ep22m"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 883, 1049, 0, 0, 0, 0, 1035, 637, 0, 0, 0, 0, 1302, 441)
+}
+point_count = 3
+
+[sub_resource type="Curve2D" id="Curve2D_ts4ud"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 1739, 1101, 0, 0, 0, 0, 1865, 907, 0, 0, 0, 0, 2204, 844, 0, 0, 0, 0, 2258, 444, 0, 0, 0, 0, 2138, 382, 0, 0, 0, 0, 1855, 234)
+}
+point_count = 6
+
 [node name="LevelBase" type="Node2D"]
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
@@ -406,7 +424,7 @@ sources/0 = SubResource("TileSetAtlasSource_vmt1o")
 motion_scale = Vector2(0.2, 1)
 
 [node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
-position = Vector2(0, 1)
+position = Vector2(-79, -312)
 scale = Vector2(1.25, 1.25)
 texture = ExtResource("1_da5si")
 centered = false
@@ -438,3 +456,27 @@ tile_set = SubResource("TileSet_vmt1o")
 visible = false
 tile_map_data = PackedByteArray("AAAAAAgAAAADAAEAAAABAAgAAAADAAEAAAACAAgAAAADAAEAAAADAAgAAAADAAEAAAAEAAgAAAADAAEAAAAFAAgAAAADAAEAAAAGAAgAAAADAAEAAAAHAAgAAAADAAEAAAAIAAgAAAADAAEAAAAJAAgAAAADAAEAAAAKAAgAAAADAAEAAAALAAgAAAADAAEAAAAMAAgAAAADAAEAAAANAAgAAAADAAEAAAAOAAgAAAADAAEAAAAPAAgAAAADAAEAAAAQAAgAAAADAAEAAAARAAgAAAADAAEAAAASAAgAAAADAAEAAAATAAgAAAADAAEAAAAUAAgAAAADAAEAAAAVAAgAAAADAAEAAAAWAAgAAAADAAEAAAAXAAgAAAADAAEAAAAYAAgAAAADAAEAAAAZAAgAAAADAAEAAAAaAAgAAAADAAEAAAAbAAgAAAADAAEAAAAcAAgAAAADAAEAAAAdAAgAAAADAAEAAAAeAAgAAAADAAEAAAAfAAgAAAADAAEAAAAgAAgAAAADAAEAAAAhAAgAAAADAAEAAAAiAAgAAAADAAEAAAAjAAgAAAADAAEAAAAkAAgAAAADAAEAAAAlAAgAAAADAAEAAAAmAAgAAAADAAEAAAAnAAgAAAADAAEAAAAoAAgAAAADAAEAAAApAAgAAAADAAEAAAAqAAgAAAADAAEAAAArAAgAAAADAAEAAAAsAAgAAAADAAEAAAAtAAgAAAADAAEAAAAuAAgAAAADAAEAAAAvAAgAAAADAAEAAAAwAAgAAAADAAEAAAAxAAgAAAADAAEAAAAyAAgAAAADAAEAAAAzAAgAAAADAAEAAAA0AAgAAAADAAEAAAA1AAgAAAADAAEAAAA2AAgAAAADAAEAAAA3AAgAAAADAAEAAAA4AAgAAAADAAEAAAA5AAgAAAADAAEAAAA6AAgAAAADAAEAAAA7AAgAAAADAAEAAAA8AAgAAAADAAEAAAA9AAgAAAADAAEAAAA+AAgAAAADAAEAAAA/AAgAAAADAAEAAABAAAgAAAADAAEAAABBAAgAAAADAAEAAABCAAgAAAADAAEAAABDAAgAAAADAAEAAABEAAgAAAADAAEAAABFAAgAAAADAAEAAABGAAgAAAADAAEAAABHAAgAAAADAAEAAABIAAgAAAADAAEAAABJAAgAAAADAAEAAABKAAgAAAADAAEAAABLAAgAAAADAAEAAABMAAgAAAADAAEAAABNAAgAAAADAAEAAABOAAgAAAADAAEAAABPAAgAAAADAAEAAABQAAgAAAADAAEAAABRAAgAAAADAAEAAABSAAgAAAADAAEAAABTAAgAAAADAAEAAABUAAgAAAADAAEAAABVAAgAAAADAAEAAABWAAgAAAADAAEAAAD+/wgAAAADAAEAAAD//wgAAAADAAEAAAA=")
 tile_set = SubResource("TileSet_da5si")
+
+[node name="NPCPaths" type="Node2D" parent="."]
+
+[node name="NPCPath1" type="Path2D" parent="NPCPaths"]
+curve = SubResource("Curve2D_da5si")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="NPCPaths/NPCPath1"]
+position = Vector2(443, 86)
+rotation = 1.08489
+
+[node name="NPCPath2" type="Path2D" parent="NPCPaths"]
+curve = SubResource("Curve2D_ep22m")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="NPCPaths/NPCPath2"]
+position = Vector2(1302, 441)
+rotation = -0.633236
+progress = 770.362
+
+[node name="NPCPath3" type="Path2D" parent="NPCPaths"]
+curve = SubResource("Curve2D_ts4ud")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="NPCPaths/NPCPath3"]
+position = Vector2(1739, 1101)
+rotation = -0.994784

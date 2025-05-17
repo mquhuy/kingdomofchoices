@@ -1,10 +1,28 @@
-[gd_scene load_steps=4 format=3 uid="uid://dwuxykjrxfdep"]
+[gd_scene load_steps=7 format=3 uid="uid://dwuxykjrxfdep"]
 
 [ext_resource type="Script" uid="uid://cmowx5y36f5um" path="res://characters/npc.gd" id="1_tjeje"]
 [ext_resource type="Texture2D" uid="uid://cjuqyj0q6knk5" path="res://graphics/girl_stand.png" id="4_pnk3k"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8e7ep"]
 size = Vector2(211, 214)
+
+[sub_resource type="Curve2D" id="Curve2D_8e7ep"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 443, 86, 0, 0, 0, 0, 565, 317, 0, 0, 0, 0, 814, 327, 0, 0, 0, 0, 810, 566, 0, 0, 0, 0, 810, 786, 0, 0, 0, 0, 798, 1004, 0, 0, 0, 0, 769, 1094, 0, 0, 0, 0, 388, 1075, 0, 0, 0, 0, 204, 1085)
+}
+point_count = 9
+
+[sub_resource type="Curve2D" id="Curve2D_yheco"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 883, 1049, 0, 0, 0, 0, 1035, 637, 0, 0, 0, 0, 1302, 441)
+}
+point_count = 3
+
+[sub_resource type="Curve2D" id="Curve2D_dcnwj"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 1739, 1101, 0, 0, 0, 0, 1865, 907, 0, 0, 0, 0, 2204, 844, 0, 0, 0, 0, 2258, 444, 0, 0, 0, 0, 2138, 382, 0, 0, 0, 0, 1855, 234)
+}
+point_count = 6
 
 [node name="Npc" type="Area2D"]
 script = ExtResource("1_tjeje")
@@ -21,5 +39,29 @@ texture = ExtResource("4_pnk3k")
 [node name="NameLabel" type="Label" parent="."]
 offset_right = 40.0
 offset_bottom = 40.0
+
+[node name="NPCPaths" type="Node2D" parent="."]
+
+[node name="NPCPath1" type="Path2D" parent="NPCPaths"]
+curve = SubResource("Curve2D_8e7ep")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="NPCPaths/NPCPath1"]
+position = Vector2(443, 86)
+rotation = 1.08489
+
+[node name="NPCPath2" type="Path2D" parent="NPCPaths"]
+curve = SubResource("Curve2D_yheco")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="NPCPaths/NPCPath2"]
+position = Vector2(1302, 441)
+rotation = -0.633236
+progress = 770.362
+
+[node name="NPCPath3" type="Path2D" parent="NPCPaths"]
+curve = SubResource("Curve2D_dcnwj")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="NPCPaths/NPCPath3"]
+position = Vector2(1739, 1101)
+rotation = -0.994784
 
 [connection signal="input_event" from="." to="." method="_on_npc_input_event"]
