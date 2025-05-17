@@ -2,11 +2,7 @@ extends Panel
 
 var current_npc = null
 
-func _ready():
-	print("In _ready DialogueText node: ", $DialogueText)
-
 func show_dialogue(text: String, npc_ref = null):
-	print("In show_dialogue DialogueText node: ", $DialogueText)
 	var dialogue_text = $DialogueText
 	dialogue_text.text = text
 	show()
