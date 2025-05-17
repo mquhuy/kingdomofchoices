@@ -30,7 +30,7 @@ func get_favorite_npc():
 	return favorite if max_interactions > 0 else ""
 	
 func give_gift(npc_name: String, item_name: String):
-	var dialogue_box = get_tree().root.get_node("Main/CanvasLayer/DialogueBox")
+	var dialogue_box = get_tree().root.get_node("Main/CanvasLayer/Control/DialogueBox")
 	if Inventory.has_item(item_name, 1):
 		Inventory.remove_item(item_name, 1)
 		increase_relationship(npc_name, 2)
@@ -41,7 +41,7 @@ func give_gift(npc_name: String, item_name: String):
 		dialogue_box.show_dialogue("You don't have any %s to give me!" % item_name)
 	
 func ask_for_help(npc_name: String):
-	var dialogue_box = get_tree().root.get_node("Main/CanvasLayer/DialogueBox")
+	var dialogue_box = get_tree().root.get_node("Main/CanvasLayer/Control/DialogueBox")
 	if QuestManager.quest_active and QuestManager.quest_npc == npc_name:
 		print(QuestManager.quest_npc_agreed)
 		if QuestManager.quest_npc_agreed:
