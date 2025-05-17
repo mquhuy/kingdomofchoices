@@ -30,19 +30,19 @@ the context of the game, and the personal relationship between the character and
 Here is the list of the characters in the game:
 - Tomo the blacksmith, male, 35 years old, loves to forge weapons and armor. Not very talkative. Quite rude and grumpy.
 - Lira the flower shop owner, 20 years old, loves flowers and nature. Very friendly and talkative.
-- Anna the innkeeper, 40 years old, loves to cook and serve food. Very friendly and talkative, but a bit clumsy.
+- Anna the innkeeper, 60 years old, loves to cook and serve food. Very friendly and talkative, but a bit clumsy.
 
 Respond using a json format with a "text" key, and a "agree" key with a boolean value, indicating that you agree to help.
 For example:
 {
-    "positive": "true",
+    "agree": "true",
     "text": "Of course! I can help you with that. What do you need?"
 }
 
 or
 
 {
-    "positive": "false",
+    "agree": "false",
     "text": "Of course! I can help you with that. What do you need?"
 }
 

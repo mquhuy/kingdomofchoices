@@ -31,13 +31,18 @@ func set_sprite_texture(path: String):
 func _on_ai_response(ai_response):
 	var dialogue_box = get_tree().root.get_node("Main/CanvasLayer/DialogueBox")
 	ai_answer = ai_response.get("text")
-	ai_answer_positive = ai_response.get("positive", false)
+	ai_answer_positive = ai_response.get("agree", "false") == "true"
+	print(ai_answer, ai_answer_positive)
 	dialogue_box.show_dialogue(
 		"%s: %s" % [npc_name, ai_answer]
 	)
 	if ai_answer_positive:
+		print("Setting QuestManager.quest_npc_agreed to true")
 		PlayerBehavior.increase_relationship(npc_name, 1)
 		QuestManager.quest_npc_agreed = true
+	else:
+		print("Setting QuestManager.quest_npc_agreed to false")
+		QuestManager.quest_npc_agreed = false
 
 func _on_npc_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton and event.pressed:
@@ -47,6 +52,7 @@ func _on_npc_input_event(viewport, event, shape_idx):
 		
 		# Check if this NPC is key for the quest
 		if QuestManager.quest_active and QuestManager.quest_npc == npc_name:
+			print(QuestManager.quest_npc_agreed)
 			if QuestManager.quest_npc_agreed:
 				QuestManager.progress_quest()
 			else:
