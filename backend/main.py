@@ -32,7 +32,7 @@ Here is the list of the characters in the game:
 - Lira the flower shop owner, 20 years old, loves flowers and nature. Very friendly and talkative.
 - Anna the innkeeper, 40 years old, loves to cook and serve food. Very friendly and talkative, but a bit clumsy.
 
-Respond using a json format with a "text" key, and a "positive" key with a boolean value.
+Respond using a json format with a "text" key, and a "agree" key with a boolean value, indicating that you agree to help.
 For example:
 {
     "positive": "true",

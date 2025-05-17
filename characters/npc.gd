@@ -37,6 +37,7 @@ func _on_ai_response(ai_response):
 	)
 	if ai_answer_positive:
 		PlayerBehavior.increase_relationship(npc_name, 1)
+		QuestManager.quest_npc_agreed = true
 
 func _on_npc_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton and event.pressed:
