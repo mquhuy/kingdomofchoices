@@ -15,6 +15,12 @@ run/main_scene="uid://1d6dtd3wgfsg"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+QuestManager="*res://scripts/quest_manager.gd"
+PlayerBehavior="*res://scripts/player_behavior.gd"
+VillageContext="*res://scripts/village_context.gd"
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"

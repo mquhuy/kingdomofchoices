@@ -16,3 +16,18 @@ offset_top = 527.0
 offset_right = 1142.0
 offset_bottom = 637.0
 script = ExtResource("3_sugp2")
+
+[node name="StartQuestButton" type="Button" parent="."]
+offset_left = 954.0
+offset_top = 564.0
+offset_right = 1143.0
+offset_bottom = 635.0
+text = "Start Storm Quest"
+
+[node name="QuestStatusLabel" type="Label" parent="."]
+offset_left = 960.0
+offset_top = 480.0
+offset_right = 1133.0
+offset_bottom = 551.0
+
+[connection signal="pressed" from="StartQuestButton" to="." method="_on_start_quest_button_pressed"]

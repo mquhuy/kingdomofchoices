@@ -21,4 +21,4 @@ shape = SubResource("RectangleShape2D_8e7ep")
 offset_right = 40.0
 offset_bottom = 40.0
 
-[connection signal="input_event" from="." to="." method="_on_input_event"]
+[connection signal="input_event" from="." to="." method="_on_npc_input_event"]
