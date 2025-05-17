@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://c161lorq7k1el"]
+
+[node name="DialogueBox" type="Panel"]
+
+[node name="DialogueText" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
