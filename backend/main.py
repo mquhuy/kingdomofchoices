@@ -16,28 +16,20 @@ OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 OLLAMA_DEFAULT_MODEL = os.getenv("OLLAMA_MODEL", "phi4-mini")
 OPENAI_DEFAULT_MODEL = os.getenv("OPENAI_MODEL", "gpt-3.5-turbo")
 
-class AIRequest(BaseModel):
-    npc_name: str
-    interaction_type: str
-    relationship_score: int
-    ask_count: int = 0
-    quest_type: str = None
-    model: str = None  # "gpt-4", "deepseek-chat", "phi4-mini", etc.
+CHARACTERS = {
+    "Tomo": "the blacksmith, male, 35 years old, loves to forge weapons and armor. Not very talkative. Quite rude and grumpy.",
+    "Lira": "the flower shop owner, 20 years old, loves flowers and nature. Very friendly and talkative.",
+    "Anna": "the innkeeper, 60 years old, loves to cook and serve food. Very friendly and talkative, but a bit clumsy."
+}
 
-@app.post("/api/ai_dialogue")
-async def ai_dialogue(req: AIRequest):
-    base_prompt = """You are an NPC in a cozy village game. Respond in a friendly, in-character way.
+base_prompt = """You are an NPC in a cozy village game. Respond in a friendly, in-character way.
 Keep the answer short and concise. Under 200 characters.
 Use a friendly tone and avoid being too formal. 
 Decide your response based on the character you are playing, the difficulty of the request or question,
 the context of the game, and the personal relationship between the character and the user.
-Here is the list of the characters in the game:
-- Tomo the blacksmith, male, 35 years old, loves to forge weapons and armor. Not very talkative. Quite rude and grumpy.
-- Lira the flower shop owner, 20 years old, loves flowers and nature. Very friendly and talkative.
-- Anna the innkeeper, 60 years old, loves to cook and serve food. Very friendly and talkative, but a bit clumsy.
 Generate the response as the exact character that is given in the context."""
 
-    help_prompt = base_prompt + """
+help_prompt = base_prompt + """
 Respond using a json format with a "text" key, and a "agree" key with a boolean value, indicating that you agree to help.
 For example:
 {
@@ -52,17 +44,72 @@ or
     "text": "No. I'm busy. Go away."
 }
 """
-    # Parse the request prompt to extract NPC name, interaction type, relationship score, and quest type
+
+gift_prompt = base_prompt + """
+Respond using a json format with a "text" key, and a "rate" key with a integer value, your interest in the gift.
+The value should be between -2 and 2, with -2 being "I hate it" and 2 being "I love it".
+For example:
+{
+    "rate": 0,
+    "text": "OK Thanks. I guess I can use it."
+}
+
+or
+
+{
+    "rate": 2,
+    "text": "Thank you! I love it! It's so beautiful!"
+}
+
+or
+
+{
+    "rate": -2,
+    "text": "I hate it! Why would you give me this?"
+"""
+
+class AIRequest(BaseModel):
+    npc_name: str
+    interaction_type: str
+    relationship_score: int
+    ask_count: int = 0
+    quest_type: str = None
+    model: str = None  # "gpt-4", "deepseek-chat", "phi4-mini", etc.
+
+@app.post("/api/ai_dialogue")
+async def ai_dialogue(req: AIRequest):
+    if req.npc_name not in CHARACTERS:
+        print("Invalid NPC name")
+        return JSONResponse(content={"text": "Invalid NPC name. Please provide a valid NPC name."}, status_code=400)
+    npc_description = CHARACTERS[req.npc_name]
+    prompt = f"""You are {req.npc_name}. {npc_description}
+Your personal relationship with the player is {req.relationship_score}, with the default value is 3 and the maximum value is 20."""
     if req.interaction_type == "ask for help":
         if req.quest_type is None:
             print("Missing quest type")
             return JSONResponse(content={"text": "Invalid request format. Please provide all required fields."}, status_code=400)
-        prompt = f"""You are {req.npc_name}, your personal relationship with the player is {req.relationship_score}, with the default value is 3 and the maximum value is 20.
+        prompt += f"""
 The lower the value, the more rude you are, and less likely you are to help.
 The higher the value, the more friendly you are, and more likely you are to help.
 You have helped the player with this quest {req.ask_count} times.
 The higher the number, the less likely you are to help.
 The player asked you to help with a quest: {req.quest_type}."""
+        system_prompt = help_prompt     
+    elif req.interaction_type == "gift":
+        if req.quest_type is None:
+            print("Missing quest type")
+            return JSONResponse(content={"text": "Invalid request format. Please provide all required fields."}, status_code=400)
+        prompt += f"""
+The player gave you a gift. It's a {req.quest_type}.
+
+The lower the value, the more rude you are, and less likely you are to help.
+The higher the value, the more friendly you are, and more likely you are to help.
+You have helped the player with this quest {req.ask_count} times.
+The higher the number, the less likely you are to help.
+The player asked you to help with a quest: {req.quest_type}."""
+        system_prompt = gift_prompt
+    else:
+        return JSONResponse(content={"text": "Invalid request format. Please provide all required fields."}, status_code=400)
 
     try:
         model = req.model or OPENAI_DEFAULT_MODEL
@@ -72,7 +119,7 @@ The player asked you to help with a quest: {req.quest_type}."""
             response = openai.ChatCompletion.create(
                 model=model,
                 messages=[
-                    {"role": "system", "content": help_prompt},
+                    {"role": "system", "content": system_prompt},
                     {"role": "user", "content": prompt}
                 ],
                 max_tokens=100,
@@ -91,7 +138,7 @@ The player asked you to help with a quest: {req.quest_type}."""
             data = {
                 "model": model,  # e.g., "deepseek-chat"
                 "messages": [
-                    {"role": "system", "content": help_prompt},
+                    {"role": "system", "content": system_prompt},
                     {"role": "user", "content": prompt},
                 ],
                 "max_tokens": 100,
@@ -107,7 +154,7 @@ The player asked you to help with a quest: {req.quest_type}."""
             # Ollama
             ollama_url = f"{OLLAMA_BASE_URL}/api/generate"
             ollama_model = model or OLLAMA_DEFAULT_MODEL
-            prompt = help_prompt + prompt
+            prompt = system_prompt + prompt
             ollama_data = {
                 "model": ollama_model,
                 "prompt": prompt,

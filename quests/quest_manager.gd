@@ -20,6 +20,8 @@ func start_quest(_type: String, _npc: String, _required: int = 3):
 	VillageContext.set_context(quest_type)
 	var dialogue_box = get_tree().root.get_node("Main/CanvasLayer/Control/DialogueBox")
 	dialogue_box.show_dialogue(QuestManager.quest_instruction)
+	var start_quest_button = get_tree().root.get_node("Main/CanvasLayer/Control/StartQuestButton")
+	start_quest_button.disabled = true
 
 func progress_quest():
 	PlayerBehavior.increase_relationship(quest_npc, -1)
@@ -42,3 +44,5 @@ func reset_quest():
 	quest_required = 0
 	quest_npc = ""
 	quest_npc_counts = {}
+	var start_quest_button = get_tree().root.get_node("Main/CanvasLayer/Control/StartQuestButton")
+	start_quest_button.disabled = false

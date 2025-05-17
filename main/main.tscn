@@ -82,4 +82,4 @@ position = Vector2(899.163, 388.812)
 texture = ExtResource("4_c651c")
 
 [connection signal="pressed" from="CanvasLayer/Control/StartQuestButton" to="CanvasLayer/Control/StartQuestButton" method="_on_start_quest_button_pressed"]
-[connection signal="timeout" from="ItemNeedCheckTimer" to="ItemNeedCheckTimer" method="_on_item_need_check_timer_timeout"]
+[connection signal="timeout" from="ItemNeedCheckTimer" to="." method="_on_item_need_check_timer_timeout"]

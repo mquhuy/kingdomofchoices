@@ -3,6 +3,8 @@ extends Node
 
 var http_request: HTTPRequest
 
+var control_buttons = []
+
 func _ready():
 	http_request = HTTPRequest.new()
 	add_child(http_request)
@@ -19,7 +21,6 @@ func get_ai_dialogue(data: Dictionary, callback: Callable, model: String="deepse
 	var err = http_request.request(url, headers, HTTPClient.METHOD_POST, json_body)
 	if err != OK:
 		print("AI request error: ", err)
-		# Optionally, call callback with error here
 
 func _on_request_completed(result, response_code, headers, body):
 	var ai_response = response_code
