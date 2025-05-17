@@ -17,7 +17,8 @@ func _on_npc_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton and event.pressed:
 		PlayerBehavior.register_interaction(npc_name)
 		var main = get_tree().root.get_node("Main")
-		var dialogue_box = main.get_node("DialogueBox")
+		var dialogue_box = get_tree().root.get_node("Main/CanvasLayer/DialogueBox")
+		
 
 		# Check if this NPC is key for the quest
 		if QuestManager.quest_active and QuestManager.quest_npc == npc_name:
@@ -42,13 +43,12 @@ func _on_npc_input_event(viewport, event, shape_idx):
 			QuestManager.reset_quest()
 
 func give_gift(item_name: String):
+	var dialogue_box = get_tree().root.get_node("Main/CanvasLayer/DialogueBox")
 	if Inventory.has_item(item_name, 1):
 		Inventory.remove_item(item_name, 1)
 		PlayerBehavior.increase_relationship(npc_name, 2)
 		var main = get_tree().root.get_node("Main")
-		var dialogue_box = main.get_node("DialogueBox")
 		dialogue_box.show_dialogue("Thank you for the %s! I like you more now." % item_name)
 	else:
 		var main = get_tree().root.get_node("Main")
-		var dialogue_box = main.get_node("DialogueBox")
 		dialogue_box.show_dialogue("You don't have any %s to give me!" % item_name)

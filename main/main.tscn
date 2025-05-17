@@ -1,0 +1,61 @@
+[gd_scene load_steps=4 format=3 uid="uid://1d6dtd3wgfsg"]
+
+[ext_resource type="Script" uid="uid://hfpfluq0ayxv" path="res://main/main.gd" id="1_xwkvk"]
+[ext_resource type="Script" uid="uid://c6xb8bfe7jg4p" path="res://quests/quests.gd" id="2_c651c"]
+[ext_resource type="PackedScene" uid="uid://c161lorq7k1el" path="res://dialogue_box/dialogue_box.tscn" id="3_3wy1v"]
+
+[node name="Main" type="Node2D"]
+scale = Vector2(1.17665, 1.18052)
+script = ExtResource("1_xwkvk")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+script = ExtResource("2_c651c")
+
+[node name="DialogueBox" parent="CanvasLayer" instance=ExtResource("3_3wy1v")]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1128.0
+offset_top = -110.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="QuestStatusLabel" type="Label" parent="CanvasLayer"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -173.0
+offset_top = -148.0
+offset_bottom = -77.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="StartQuestButton" type="Button" parent="CanvasLayer"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -189.0
+offset_top = -71.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Start Storm Quest"
+
+[node name="Background" type="Sprite2D" parent="."]
+
+[node name="ItemNeedCheckTimer" type="Timer" parent="."]
+wait_time = 4.0
+autostart = true
+
+[node name="WorldCamera" type="Camera2D" parent="."]
+scale = Vector2(86.887, -10.0302)
+anchor_mode = 0
+zoom = Vector2(0.5, 0.5)
+
+[connection signal="pressed" from="CanvasLayer/StartQuestButton" to="." method="_on_start_quest_button_pressed"]
+[connection signal="timeout" from="ItemNeedCheckTimer" to="." method="_on_item_need_check_timer_timeout"]
