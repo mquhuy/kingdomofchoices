@@ -18,9 +18,9 @@ var ITEM_SPAWN_CONFIGS = [
 ]
 
 func _ready():
-	spawn_npc("Lira", "res://graphics/girl_stand.png", Vector2(100, 100))
-	spawn_npc("Tomo", "res://graphics/blacksmith_stand.png", Vector2(300, 100))
-	spawn_npc("Anna", "res://graphics/granny_stand.png", Vector2(200, 250))
+	spawn_npc("Lira", "res://graphics/girl_stand.png", Vector2(450, 100))
+	spawn_npc("Tomo", "res://graphics/blacksmith_stand.png", Vector2(1300, 550))
+	spawn_npc("Anna", "res://graphics/granny_stand.png", Vector2(550, 500))
 	
 func check_and_spawn_needed_items():
 	for item_conf in ITEM_SPAWN_CONFIGS:

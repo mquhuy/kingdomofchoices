@@ -1,3 +1,4 @@
+
 extends Area2D
 @export var npc_name: String = "Villager"
 @export var color: Color = Color(1,1,1)
@@ -29,7 +30,7 @@ func set_sprite_texture(path: String):
 		push_error("Sprite2D node named '%s' not found in NPC scene!" % node_name)
 	
 func _on_ai_response(ai_response):
-	var dialogue_box = get_tree().root.get_node("Main/CanvasLayer/DialogueBox")
+	var dialogue_box = get_tree().root.get_node("Main/CanvasLayer/Control/DialogueBox")
 	ai_answer = ai_response.get("text")
 	ai_answer_positive = ai_response.get("agree", "false") == "true"
 	print(ai_answer, ai_answer_positive)
