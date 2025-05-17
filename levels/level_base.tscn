@@ -1,12 +1,14 @@
 [gd_scene load_steps=9 format=4 uid="uid://bcd12ih7lqok3"]
 
-[ext_resource type="Texture2D" uid="uid://c6atsses4um0c" path="res://backgroundTileAssets/mystic_woods_free_2.2/sprites/tilesets/plains.png" id="1_hk6b7"]
 [ext_resource type="Texture2D" uid="uid://c3pekt1wqv72e" path="res://backgroundTileAssets/environment/back.png" id="1_vmt1o"]
 [ext_resource type="Texture2D" uid="uid://cyyas4gqqei87" path="res://backgroundTileAssets/environment/middle.png" id="2_da5si"]
 [ext_resource type="Texture2D" uid="uid://74nbqe2yiml6" path="res://backgroundTileAssets/environment/tileset.png" id="2_nmr65"]
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_vmt1o"]
+load_path = "res://.godot/imported/plains.png-454ab1ee92e19e87b93085400a3517eb.ctex"
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nmr65"]
-texture = ExtResource("1_hk6b7")
+texture = SubResource("CompressedTexture2D_vmt1o")
 0:0/0 = 0
 0:0/0/terrain_set = 0
 0:0/0/terrain = 0
