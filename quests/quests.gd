@@ -8,12 +8,7 @@ func _process(delta):
 		quest_status_label.text = ""
 
 func _on_start_quest_button_pressed() -> void:
-	var quest_names = ["festival time", "storm recovery", "spring cleaning", "midnight hunt"]
-	var character_names = ["Anna", "Tomo", "Lira"]
-	var rng = RandomNumberGenerator.new()
-	rng.randomize()
-
-	var quest_name = quest_names[rng.randi_range(0, quest_names.size() - 1)]
-	var character_name = character_names[rng.randi_range(0, character_names.size() - 1)]
-	var quest_goal = rng.randi_range(5, 20)
+	var character_name = WorldConfig.get_random_character()
+	var quest_name = WorldConfig.get_random_quest()
+	var quest_goal = WorldConfig.get_random_number(5, 15)
 	QuestManager.start_quest(quest_name, character_name, quest_goal)

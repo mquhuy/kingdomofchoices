@@ -47,36 +47,7 @@ func _on_ai_response(ai_response):
 func _on_npc_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton and event.pressed:
 		PlayerBehavior.register_interaction(npc_name)
+		VillageContext.set_current_npc(npc_name)
 		var main = get_tree().root.get_node("Main")
 		var dialogue_box = get_tree().root.get_node("Main/CanvasLayer/DialogueBox")
-		
-		# Check if this NPC is key for the quest
-		if QuestManager.quest_active and QuestManager.quest_npc == npc_name:
-			print(QuestManager.quest_npc_agreed)
-			if QuestManager.quest_npc_agreed:
-				QuestManager.progress_quest()
-			else:
-				var relationship_score = PlayerBehavior.get_relationship(npc_name)
-				ai_answer = ""
-				AI.get_ai_dialogue("As the NPC %s, answer to player request for help with preparing for %s. 
-				The relationship score between your character and the player is %d/20" %[npc_name, QuestManager.quest_type, relationship_score], Callable(self, "_on_ai_response"))
-				dialogue_box.show_dialogue(npc_name + " is thinking about your request.", self)
-		else:
-			dialogue_box.show_dialogue("%s: Hello, I am %s !" % [npc_name, npc_name], self)
-		
-		# Check for quest completion
-		if QuestManager.is_quest_complete():
-			var complete_text = "Quest complete!"
-			dialogue_box.show_dialogue(complete_text)
-			QuestManager.reset_quest()
-
-func give_gift(item_name: String):
-	var dialogue_box = get_tree().root.get_node("Main/CanvasLayer/DialogueBox")
-	if Inventory.has_item(item_name, 1):
-		Inventory.remove_item(item_name, 1)
-		PlayerBehavior.increase_relationship(npc_name, 2)
-		var main = get_tree().root.get_node("Main")
-		dialogue_box.show_dialogue("Thank you for the %s! I like you more now." % item_name)
-	else:
-		var main = get_tree().root.get_node("Main")
-		dialogue_box.show_dialogue("You don't have any %s to give me!" % item_name)
+		dialogue_box.show_dialogue("%s: Hello, I am %s !" % [npc_name, npc_name])

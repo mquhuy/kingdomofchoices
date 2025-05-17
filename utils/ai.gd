@@ -10,10 +10,10 @@ func _ready():
 
 var _callback = null
 
-func get_ai_dialogue(prompt: String, callback: Callable, model: String="deepseek-chat"):
+func get_ai_dialogue(data: Dictionary, callback: Callable, model: String="deepseek-chat"):
 	var url = "http://0.0.0.0:8000/api/ai_dialogue"
 	var headers = ["Content-Type: application/json"]
-	var data = {"prompt": prompt, "model": model}
+	data["model"] = model
 	var json_body = JSON.stringify(data)
 	_callback = callback
 	var err = http_request.request(url, headers, HTTPClient.METHOD_POST, json_body)
@@ -22,9 +22,9 @@ func get_ai_dialogue(prompt: String, callback: Callable, model: String="deepseek
 		# Optionally, call callback with error here
 
 func _on_request_completed(result, response_code, headers, body):
-	var ai_text = response_code
+	var ai_response = response_code
 	if response_code == 200:
 		var response_json = JSON.parse_string(body.get_string_from_utf8())
-		ai_text = response_json
+		ai_response = response_json
 	if _callback != null:
-		_callback.call(ai_text)
+		_callback.call(ai_response)

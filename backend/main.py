@@ -17,12 +17,15 @@ OLLAMA_DEFAULT_MODEL = os.getenv("OLLAMA_MODEL", "phi4-mini")
 OPENAI_DEFAULT_MODEL = os.getenv("OPENAI_MODEL", "gpt-3.5-turbo")
 
 class AIRequest(BaseModel):
-    prompt: str
+    npc_name: str
+    interaction_type: str
+    relationship_score: int
+    quest_type: str = None
     model: str = None  # "gpt-4", "deepseek-chat", "phi4-mini", etc.
 
 @app.post("/api/ai_dialogue")
 async def ai_dialogue(req: AIRequest):
-    support_prompt = """You are an NPC in a cozy village game. Respond in a friendly, in-character way.
+    base_prompt = """You are an NPC in a cozy village game. Respond in a friendly, in-character way.
 Keep the answer short and concise. Under 200 characters.
 Use a friendly tone and avoid being too formal. 
 Decide your response based on the character you are playing, the difficulty of the request or question,
@@ -31,7 +34,9 @@ Here is the list of the characters in the game:
 - Tomo the blacksmith, male, 35 years old, loves to forge weapons and armor. Not very talkative. Quite rude and grumpy.
 - Lira the flower shop owner, 20 years old, loves flowers and nature. Very friendly and talkative.
 - Anna the innkeeper, 60 years old, loves to cook and serve food. Very friendly and talkative, but a bit clumsy.
+Generate the response as the exact character that is given in the context."""
 
+    help_prompt = base_prompt + """
 Respond using a json format with a "text" key, and a "agree" key with a boolean value, indicating that you agree to help.
 For example:
 {
@@ -45,10 +50,15 @@ or
     "agree": "false",
     "text": "No. I'm busy. Go away."
 }
-
-Generate the response as the exact character that is given in the context.
 """
-    print(req.prompt)
+    # Parse the request prompt to extract NPC name, interaction type, relationship score, and quest type
+    if req.interaction_type == "ask for help":
+        if req.quest_type is None:
+            print("Missing quest type")
+            return JSONResponse(content={"text": "Invalid request format. Please provide all required fields."}, status_code=400)
+        prompt = f"""You are {req.npc_name}, your personal relationship with the player is {req.relationship_score}, with the default value is 3 and the maximum value is 20.
+The player asked you to help with a {req.quest_type}."""
+
     try:
         model = req.model or OPENAI_DEFAULT_MODEL
 
@@ -57,8 +67,8 @@ Generate the response as the exact character that is given in the context.
             response = openai.ChatCompletion.create(
                 model=model,
                 messages=[
-                    {"role": "system", "content": support_prompt},
-                    {"role": "user", "content": req.prompt}
+                    {"role": "system", "content": help_prompt},
+                    {"role": "user", "content": prompt}
                 ],
                 max_tokens=100,
                 temperature=0.9,
@@ -76,8 +86,8 @@ Generate the response as the exact character that is given in the context.
             data = {
                 "model": model,  # e.g., "deepseek-chat"
                 "messages": [
-                    {"role": "system", "content": support_prompt},
-                    {"role": "user", "content": req.prompt},
+                    {"role": "system", "content": help_prompt},
+                    {"role": "user", "content": prompt},
                 ],
                 "max_tokens": 100,
                 "temperature": 0.9,
@@ -91,7 +101,7 @@ Generate the response as the exact character that is given in the context.
             # Ollama
             ollama_url = f"{OLLAMA_BASE_URL}/api/generate"
             ollama_model = model or OLLAMA_DEFAULT_MODEL
-            prompt = support_prompt + req.prompt
+            prompt = help_prompt + prompt
             ollama_data = {
                 "model": ollama_model,
                 "prompt": prompt,

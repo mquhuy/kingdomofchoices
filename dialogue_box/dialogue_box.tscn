@@ -1,6 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://c161lorq7k1el"]
+[gd_scene load_steps=5 format=3 uid="uid://c161lorq7k1el"]
 
 [ext_resource type="Script" uid="uid://ciex1j7wss2yl" path="res://dialogue_box/dialogue_box.gd" id="1_2ix3t"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_rgaxe"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_no5ax"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_6edet"]
 
 [node name="DialogueBox" type="Panel"]
 script = ExtResource("1_2ix3t")
@@ -17,5 +23,27 @@ offset_top = 43.0
 offset_right = 52.0
 offset_bottom = 56.0
 text = "Give gift"
+icon = SubResource("CanvasTexture_rgaxe")
+
+[node name="AskHelpButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 82.0
+offset_top = 43.0
+offset_right = 190.0
+offset_bottom = 74.0
+text = "Ask for Help"
+icon = SubResource("CanvasTexture_no5ax")
+
+[node name="TipButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 195.0
+offset_top = 43.0
+offset_right = 240.0
+offset_bottom = 74.0
+text = "Tips
+"
+icon = SubResource("CanvasTexture_6edet")
 
 [connection signal="pressed" from="GiftButton" to="." method="_on_give_gift_pressed"]
+[connection signal="pressed" from="AskHelpButton" to="." method="_on_ask_help_button_pressed"]
+[connection signal="pressed" from="TipButton" to="." method="_on_tip_button_pressed"]

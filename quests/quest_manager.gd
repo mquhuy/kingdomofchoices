@@ -23,6 +23,10 @@ func start_quest(_type: String, _npc: String, _required: int = 3):
 func progress_quest():
 	if quest_active:
 		quest_progress += 1
+	if is_quest_complete():
+		return
+	quest_npc = WorldConfig.get_random_character()
+	quest_instruction = "%s. Ask %s for help" % [quest_type, quest_npc]
 
 func is_quest_complete():
 	return quest_active and quest_progress >= quest_required
