@@ -6,9 +6,11 @@ var quest_progress := 0
 var quest_required := 3
 var quest_npc := "" # Which NPC is key to this quest
 var quest_instruction := ""
+var quest_npc_agreed = false
 
 func start_quest(_type: String, _npc: String, _required: int = 3):
 	quest_active = true
+	quest_npc_agreed = false
 	quest_type = _type.capitalize()
 	quest_npc = _npc
 	quest_progress = 0
