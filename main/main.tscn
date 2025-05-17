@@ -15,6 +15,16 @@ script = ExtResource("1_xwkvk")
 follow_viewport_enabled = true
 script = ExtResource("2_c651c")
 
+[node name="RelationshipLabel" type="Label" parent="CanvasLayer"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -306.98
+offset_right = 1.02002
+offset_bottom = 85.0
+grow_horizontal = 0
+size_flags_horizontal = 8
+
 [node name="Control" type="Control" parent="CanvasLayer"]
 layout_mode = 3
 anchors_preset = 0

@@ -21,9 +21,11 @@ func register_interaction(npc_name: String):
 
 func increase_relationship(npc_name: String, amount: int = 1):
 	var npc_relationship_score = get_relationship(npc_name)
-	relationship_scores[npc_name] = npc_relationship_score + amount
-	print("New relationship score for %s is %d" %[npc_name, relationship_scores[npc_name]])
-	relationship_scores[npc_name] = clamp(relationship_scores[npc_name], 0, 20)
+	var new_npc_relationship_score = npc_relationship_score + amount
+	relationship_scores[npc_name] = new_npc_relationship_score
+	print("New relationship score for %s is %d" %[npc_name, new_npc_relationship_score])
+	relationship_scores[npc_name] = clamp(relationship_scores[npc_name], -20, 20)
+	VillageContext.update_relationship_label(npc_name, new_npc_relationship_score)
 
 func get_relationship(npc_name: String) -> int:
 	return relationship_scores.get(npc_name, 3)  # Default relationship is 3
@@ -109,6 +111,7 @@ func _on_ai_think_response(ai_response):
 		option3Button.visible = true
 		
 func _on_ai_chat_response(ai_response):
+	print(ai_response)
 	var dialogue_box = get_tree().root.get_node("Main/CanvasLayer/Control/DialogueBox")
 	ai_answer = ai_response.get("text")
 	ai_rate = parse_int(ai_response.get("rate", 0))
@@ -116,6 +119,7 @@ func _on_ai_chat_response(ai_response):
 	dialogue_box.show_dialogue(
 		"%s: %s" % [VillageContext.get_currnet_npc(), ai_answer]
 	)
+	var npc_name = VillageContext.get_currnet_npc()
 	increase_relationship(npc_name, ai_rate)
 	enable_buttons()
 		
@@ -149,11 +153,12 @@ func parse_bool(value):
 func parse_int(value):
 	if typeof(value) == TYPE_INT:
 		return value
-	if typeof(value) == TYPE_STRING:
+	if typeof(value) == TYPE_STRING or typeof(value) == TYPE_FLOAT:
 		return int(value)
 	return 0
 
 func _on_ai_help_response(ai_response):
+	print(ai_response)
 	var dialogue_box = get_tree().root.get_node("Main/CanvasLayer/Control/DialogueBox")
 	ai_answer = ai_response.get("text")
 	ai_answer_positive = parse_bool(ai_response.get("agree", "false"))
@@ -166,6 +171,7 @@ func _on_ai_help_response(ai_response):
 	enable_buttons()
 		
 func _on_ai_gift_response(ai_response):
+	print(ai_response)
 	var dialogue_box = get_tree().root.get_node("Main/CanvasLayer/Control/DialogueBox")
 	ai_answer = ai_response.get("text")
 	ai_rate = parse_int(ai_response.get("rate", 0))
@@ -173,5 +179,6 @@ func _on_ai_gift_response(ai_response):
 	dialogue_box.show_dialogue(
 		"%s: %s" % [VillageContext.get_currnet_npc(), ai_answer]
 	)
+	var npc_name = VillageContext.get_currnet_npc()
 	increase_relationship(npc_name, ai_rate)
 	enable_buttons()
