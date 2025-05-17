@@ -1,7 +1,7 @@
 extends Node
 
 func _process(delta):
-	var quest_status_label = get_tree().root.get_node("Main/CanvasLayer/QuestStatusLabel")
+	var quest_status_label = get_tree().root.get_node("Main/CanvasLayer/Control/QuestStatusLabel")
 	if QuestManager.quest_active:
 		quest_status_label.text = "%s Prep: %d/%d" % [QuestManager.quest_type, QuestManager.quest_progress, QuestManager.quest_required]
 	else:
