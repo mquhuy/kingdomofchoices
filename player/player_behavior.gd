@@ -86,6 +86,7 @@ func think_of_chat(npc_name: String):
 	if npc_name == "":
 		dialogue_box.show_dialogue("Please select one character to chat")
 		return
+	dialogue_box.show_dialogue("")
 	disable_buttons()
 	var relationship_score = PlayerBehavior.get_relationship(npc_name)
 	AI.get_ai_dialogue({'npc_name': npc_name, 'interaction_type': 'think of chat', 'quest_type': QuestManager.quest_type, 'relationship_score': relationship_score, 'ask_count': 0}, Callable(self, "_on_ai_think_response"))
