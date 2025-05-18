@@ -8,6 +8,12 @@ A village-based RPG with AI-powered NPC interactions, quest system, and relation
 
 Kingdom of Choices is a cozy village game where players interact with NPCs, complete quests, and build relationships. The game features AI-powered dialogue that responds dynamically based on the player's relationships with NPCs and the context of ongoing quests.
 
+## Game Rules
+
+The goal of the game is to build strong relationships with the NPC characters. You can do this by talking to them or giving them gifts they appreciate. Each interaction affects your relationship status. When you have a good relationship with an NPC, they will be more likely to help you during quests that require assistance. 
+
+AI is used to generate realistic and dynamic responses from NPCs—whether you're having a casual conversation, offering them a gift, or asking for help on a quest.
+
 ## Features
 
 - **AI-Powered Dialogue**: NPCs respond dynamically using AI language models
